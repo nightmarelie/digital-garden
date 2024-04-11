@@ -1,12 +1,15 @@
-use std::str::FromStr;
 use color_eyre::eyre::Result;
 use structopt::StructOpt;
 
 /// A CLI for the growing and curation of a digital garden
 #[derive(Debug, StructOpt)]
-#[structopt(name = "garden", about = "A CLI tool for creating and managing a digital garden.")]
+#[structopt(
+    name = "garden",
+    about = "A CLI tool for creating and managing a digital garden."
+)]
 struct Opt {
     #[structopt(subcommand)]
+    #[allow(dead_code)]
     cmd: Command,
 }
 
@@ -18,7 +21,8 @@ enum Command {
     Write {
         /// Optionally specify a title for what you're writing about
         #[structopt(short, long)]
-        title: Option<String>
+        #[allow(dead_code)]
+        title: Option<String>,
     },
 }
 
@@ -29,4 +33,3 @@ fn main() -> Result<()> {
 
     todo!();
 }
-
