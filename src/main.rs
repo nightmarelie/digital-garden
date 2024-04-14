@@ -25,14 +25,14 @@ enum Command {
         title: Option<String>,
     },
 }
-
+ 
 fn main() -> Result<()> {
     color_eyre::install()?;
     let opt = Opt::from_args();
-    dbg!(opt);
+    dbg!(&opt);
     
     match opt.cmd {
-        Command::Write { title } => {
+        Command::Write { title: _ } => {
             todo!();
         }
     }
