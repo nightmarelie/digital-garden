@@ -18,6 +18,7 @@ garden write -t "Title"
 
 ```bash
 cargo install cargo-watch # Install cargo-watch to watch for changes
+watch -x 
 ```
 
 ### Setting the garden path

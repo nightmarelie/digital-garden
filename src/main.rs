@@ -1,5 +1,5 @@
 use std::path::PathBuf;
-use color_eyre::eyre::{eyre, Result};
+use color_eyre::eyre::{eyre, Result, WrapErr};
 use structopt::StructOpt;
 use digital_garden::write;
 use directories::UserDirs;
@@ -35,15 +35,20 @@ enum Command {
 fn get_deafult_garden_dir() -> Result<PathBuf> {
     let user_dirs = UserDirs::new().ok_or_else(|| eyre!("Could not find user directories"))?;
     
-    Ok(user_dirs.home_dir().join("garden"))
+    Ok(user_dirs.home_dir().join(".garden"))
 }
 
 fn main() -> Result<()> {
     color_eyre::install()?;
     let opt = Opt::from_args();
     dbg!(&opt);
+    let garden_path = match  opt.garden_path {
+        Some(path) => Ok(path),
+        None => get_deafult_garden_dir().wrap_err("Could not find garden path"),
+    }?;
+    
 
     match opt.cmd {
-        Command::Write { title } => write(title)
+        Command::Write { title } => write(garden_path, title)
     }
 }
