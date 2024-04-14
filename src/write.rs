@@ -7,7 +7,7 @@ use edit::{Builder, edit_file};
 const TEMPLATE: &[u8; 2] = b"# ";
 
 
-pub fn write(garden_path: PathBuf, _title: Option<String>) -> Result<()> {
+pub fn write(garden_path: PathBuf, title: Option<String>) -> Result<()> {
     let (mut file, filepath) = Builder::new()
         .suffix(".md")
         .rand_bytes(5)
@@ -23,6 +23,17 @@ pub fn write(garden_path: PathBuf, _title: Option<String>) -> Result<()> {
     let mut contents = String::new();
     file.read_to_string(&mut contents)?;
 
-    dbg!(contents);
+    // use `title` if the user passed it in,
+    // otherwise try to find a heading in the markdown
+    let document_title = title.or_else(|| {
+        contents
+            .lines()
+            .find(|v| v.starts_with("# "))
+            // markdown headings are required to have `# ` with
+            // at least one space
+            .map(|maybe_line| maybe_line.trim_start_matches("# ").to_string())
+    });
+
+    dbg!(contents, document_title);
     todo!()
 }
