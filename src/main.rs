@@ -1,6 +1,8 @@
-use color_eyre::eyre::Result;
+use std::path::PathBuf;
+use color_eyre::eyre::{eyre, Result};
 use structopt::StructOpt;
 use digital_garden::write;
+use directories::UserDirs;
 
 /// A CLI for the growing and curation of a digital garden
 #[derive(Debug, StructOpt)]
@@ -9,6 +11,9 @@ use digital_garden::write;
     about = "A CLI tool for creating and managing a digital garden."
 )]
 struct Opt {
+    #[structopt(parse(from_os_str), short = "p", long, env = "GARDEN_PATH")]
+    garden_path: Option<PathBuf>,
+    
     #[structopt(subcommand)]
     #[allow(dead_code)]
     cmd: Command,
@@ -25,6 +30,12 @@ enum Command {
         #[allow(dead_code)]
         title: Option<String>,
     },
+}
+
+fn get_deafult_garden_dir() -> Result<PathBuf> {
+    let user_dirs = UserDirs::new().ok_or_else(|| eyre!("Could not find user directories"))?;
+    
+    Ok(user_dirs.home_dir().join("garden"))
 }
 
 fn main() -> Result<()> {
