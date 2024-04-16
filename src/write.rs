@@ -53,7 +53,8 @@ fn ask_for_filename() -> Result<String> {
 Enter filename
 > ",
     )
-    .wrap_err("Failed to get filename")
+        .wrap_err("Failed to get filename")
+        .map(|title| slug::slugify(title))
 }
 
 fn confirm_filename(raw_title: &str) -> Result<String> {
