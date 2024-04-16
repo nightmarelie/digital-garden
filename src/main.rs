@@ -41,7 +41,7 @@ fn get_deafult_garden_dir() -> Result<PathBuf> {
 fn main() -> Result<()> {
     color_eyre::install()?;
     let opt = Opt::from_args();
-    dbg!(&opt);
+
     let garden_path = match  opt.garden_path {
         Some(path) => Ok(path),
         None => get_deafult_garden_dir().wrap_err("Could not find garden path"),
