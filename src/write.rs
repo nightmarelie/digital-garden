@@ -1,4 +1,4 @@
-use std::io::{Read, Write};
+use std::io::{Read, Seek, SeekFrom, Write};
 use std::path::PathBuf;
 
 use color_eyre::eyre::{Result, WrapErr};
@@ -21,6 +21,8 @@ pub fn write(garden_path: PathBuf, title: Option<String>) -> Result<()> {
     edit_file(filepath)?;
     // Read the user's changes back from the file into a string
     let mut contents = String::new();
+    file.seek(SeekFrom::Start(0))?;
+    file.read_to_string(&mut contents)?;
     file.read_to_string(&mut contents)?;
 
     // use `title` if the user passed it in,
