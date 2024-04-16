@@ -3,7 +3,7 @@ use std::io::{Read, Seek, SeekFrom, Write};
 use std::path::PathBuf;
 
 use color_eyre::eyre::{Result, WrapErr};
-use edit::{Builder, edit_file};
+use edit::{edit_file, Builder};
 
 const TEMPLATE: &[u8; 2] = b"# ";
 
@@ -71,8 +71,8 @@ fn ask_for_filename() -> Result<String> {
 Enter filename
 > ",
     )
-        .wrap_err("Failed to get filename")
-        .map(|title| slug::slugify(title))
+    .wrap_err("Failed to get filename")
+    .map(|title| slug::slugify(title))
 }
 
 fn confirm_filename(raw_title: &str) -> Result<String> {
