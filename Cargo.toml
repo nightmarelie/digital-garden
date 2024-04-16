@@ -18,6 +18,8 @@ structopt = { version = "0.3", features = ["paw"] }
 paw = "1.0"
 directories = "5.0.1"
 edit = "0.1.5"
+rprompt = "1.0.5"
+slug = "0.1.5"
 
 [dev-dependencies]
 assert_cmd = "2.0.14"
