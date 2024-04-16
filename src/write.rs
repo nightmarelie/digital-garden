@@ -1,3 +1,4 @@
+use std::fs;
 use std::io::{Read, Seek, SeekFrom, Write};
 use std::path::PathBuf;
 
@@ -17,7 +18,7 @@ pub fn write(garden_path: PathBuf, title: Option<String>) -> Result<()> {
     file.write_all(TEMPLATE)?;
     // let the user write whatever they want in their favorite editor
     // before returning to the cli and finishing up
-    edit_file(filepath)?;
+    edit_file(&filepath)?;
     // Read the user's changes back from the file into a string
     let mut contents = String::new();
     file.seek(SeekFrom::Start(0))?;
@@ -36,15 +37,32 @@ pub fn write(garden_path: PathBuf, title: Option<String>) -> Result<()> {
     });
 
     let filename = match document_title {
-        Some(raw_title) => {
-            // confirm_filename()?
-            todo!()
-        }
+        Some(raw_title) => confirm_filename(&raw_title),
         None => ask_for_filename(),
-    };
+    }?;
 
-    dbg!(contents, document_title);
-    todo!()
+    let mut i: usize = 0;
+    loop {
+        let dest_filename = format!(
+            "{}{}",
+            filename,
+            if i == 0 {
+                "".to_string()
+            } else {
+                i.to_string()
+            }
+        );
+        let mut dest = garden_path.join(dest_filename);
+        dest.set_extension("md");
+        if dest.exists() {
+            i = i + 1;
+        } else {
+            fs::rename(filepath, &dest)?;
+            break;
+        }
+    }
+
+    Ok(())
 }
 
 fn ask_for_filename() -> Result<String> {
