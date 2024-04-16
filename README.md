@@ -10,6 +10,7 @@ A CLI tool for creating and managing a digital garden.
 ```bash
 garden write
 garden write -t "Title"
+garden write -t "Title" -c "Content"
 ```
 
 # Development
@@ -19,6 +20,7 @@ garden write -t "Title"
 ```bash
 cargo install cargo-watch # Install cargo-watch to watch for changes
 watch -x 
+watch -x "cargo build" # Run cargo build on file changes
 ```
 
 ### Setting the garden path
